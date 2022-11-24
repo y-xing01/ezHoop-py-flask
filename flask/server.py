@@ -1,7 +1,7 @@
-import flask
+from flask import Flask
 import requests
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 # to display the connection status
 

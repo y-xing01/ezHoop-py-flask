@@ -51,4 +51,4 @@ class MySubscribeCallback(SubscribeCallback):
 
 
 pubnub.add_listener(MySubscribeCallback())
-pubnub.subscribe().channels('test').execute()
+pubnub.subscribe().channels('score').execute()
