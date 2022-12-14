@@ -56,44 +56,27 @@ def end_game():
     is_game_running = False
 
 
-# def detect_motion():
-#     global score
-#     global is_game_running
-#
-#     try:
-#         while True:
-#             if is_game_running:
-#                 if GPIO.input(channel_vibration) == 1:
-#                     print("Motion detected")
-#                     print("Scored " + score + " in total")
-#                     score = score + 1
-#                     pubnub.publish().channel('score').message(score).pn_async(score_callback)
-#                 else:
-#                     print("No motion detected")
-#             time.sleep(1)
-#     except KeyboardInterrupt:
-#         GPIO.cleanup()
-
-
 def action_callback(channel):
     global is_game_running
     global count_motion, count_vibration
     global time_motion, time_vibration
 
-    if GPIO.input(channel) == GPIO.input(channel_motion):
-        count_motion = count_motion + 1
-        time_motion = time.time()
-        # print("Motion detected")
-    elif GPIO.input(channel) == GPIO.input(channel_vibration):
-        count_vibration = count_vibration + 1
-        time_vibration = time.time()
-        # print("Vibration detected")
+    if is_game_running:
+        if GPIO.input(channel) == GPIO.input(channel_motion):
+            count_motion = count_motion + 1
+            time_motion = time.time()
+            # print("Motion detected")
+        elif GPIO.input(channel) == GPIO.input(channel_vibration):
+            count_vibration = count_vibration + 1
+            time_vibration = time.time()
+            # print("Vibration detected")
 
-    check_score()
+        check_score()
 
 
 def check_score():
     global time_motion, time_vibration
+    global count_score
 
     if time.time() - time_motion > 1:
         time_motion = 0
@@ -102,17 +85,20 @@ def check_score():
         time_vibration = 0
 
     if time_motion != 0 and time_vibration != 0:
-        print("Scored!")
+        count_score = count_score + 1
+        print("Scored " + str(count_score) + " in total")
+        pubnub.publish().channel('score').message(count_score).pn_async(score_callback)
 
 
-# def score_callback(envelope, status):
-#     # Check whether request successfully completed or not
-#     if not status.is_error():
-#         pass  # Message successfully published to specified channel.
-#     else:
-#         pass  # Handle message publish error. Check 'category' property to find out possible issue
-#         # because of which request did fail.
-#         # Request can be resent using: [status retry];
+
+def score_callback(envelope, status):
+    # Check whether request successfully completed or not
+    if not status.is_error():
+        pass  # Message successfully published to specified channel.
+    else:
+        pass  # Handle message publish error. Check 'category' property to find out possible issue
+        # because of which request did fail.
+        # Request can be resent using: [status retry];
 
 
 class GameCallback(SubscribeCallback):
