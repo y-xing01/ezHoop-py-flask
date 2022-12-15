@@ -37,10 +37,10 @@ def init():
     pubnub.add_listener(GameCallback())
     pubnub.subscribe().channels('game').execute()
 
-    GPIO.add_event_detect(channel_motion, GPIO.BOTH, bouncetime=300)
+    GPIO.add_event_detect(channel_motion, GPIO.BOTH, bouncetime=3000)
     GPIO.add_event_callback(channel_motion, action_callback)
 
-    GPIO.add_event_detect(channel_vibration, GPIO.BOTH, bouncetime=1000)
+    GPIO.add_event_detect(channel_vibration, GPIO.BOTH, bouncetime=300)
     GPIO.add_event_callback(channel_vibration, action_callback)
 
 
@@ -95,6 +95,35 @@ def check_score():
         count_miss = count_miss + 1
         print("Missed " + str(count_miss) + " in total")
         pubnub.publish().channel('miss').message(count_miss).pn_async(score_callback)
+
+
+    # while True:
+    #     if time_motion != 0 or time_vibration != 0:
+    #         if time.time() - time_motion > 3 and time_vibration == 0:
+    #             # Miss
+    #             time_motion = 0
+    #             count_miss = count_miss + 1
+    #             print("Missed " + str(count_miss) + " in total - " + str(time_motion) + "-" + str(time_vibration))
+    #             pubnub.publish().channel('miss').message(count_miss).pn_async(score_callback)
+    #         elif time.time() - time_vibration > 2 and time_motion == 0:
+    #             # Miss
+    #             time_vibration = 0
+    #             count_miss = count_miss + 1
+    #             print("Missed " + str(count_miss) + " in total - " + str(time_motion) + "-" + str(time_vibration))
+    #             pubnub.publish().channel('miss').message(count_miss).pn_async(score_callback)
+    #         elif time.time() - time_motion <= 3 and time_vibration == 0:
+    #             # Wait
+    #             print("Waiting")
+    #         elif time.time() - time_vibration <= 1 and time_motion == 0:
+    #             # Wait
+    #             print("Waiting")
+    #         elif time.time() - time_motion <= 3 and time.time() - time_vibration <= 1 and time_motion != 0 and time_vibration != 0:
+    #             # Score
+    #             count_score = count_score + 1
+    #             print("Scored " + str(count_score) + " in total")
+    #             pubnub.publish().channel('score').message(count_score).pn_async(score_callback)
+    #
+    #     time.sleep(1)
 
 
 def score_callback(envelope, status):
