@@ -28,25 +28,28 @@ time_vibration = 0
 
 count_motion = 0
 count_vibration = 0
+
 count_score = 0
+count_miss = 0
 
 
 def init():
     pubnub.add_listener(GameCallback())
     pubnub.subscribe().channels('game').execute()
 
-    GPIO.add_event_detect(channel_motion, GPIO.BOTH, bouncetime=3000)
+    GPIO.add_event_detect(channel_motion, GPIO.BOTH, bouncetime=300)
     GPIO.add_event_callback(channel_motion, action_callback)
 
-    GPIO.add_event_detect(channel_vibration, GPIO.BOTH, bouncetime=300)
+    GPIO.add_event_detect(channel_vibration, GPIO.BOTH, bouncetime=1000)
     GPIO.add_event_callback(channel_vibration, action_callback)
 
 
 def start_game():
-    global count_score
+    global count_score, count_miss
     global is_game_running
 
     count_score = 0
+    count_miss = 0
     is_game_running = True
 
 
@@ -76,7 +79,7 @@ def action_callback(channel):
 
 def check_score():
     global time_motion, time_vibration
-    global count_score
+    global count_score, count_miss
 
     if time.time() - time_motion > 1:
         time_motion = 0
@@ -88,7 +91,10 @@ def check_score():
         count_score = count_score + 1
         print("Scored " + str(count_score) + " in total")
         pubnub.publish().channel('score').message(count_score).pn_async(score_callback)
-
+    else:
+        count_miss = count_miss + 1
+        print("Missed " + str(count_miss) + " in total")
+        pubnub.publish().channel('miss').message(count_miss).pn_async(score_callback)
 
 
 def score_callback(envelope, status):
@@ -110,7 +116,7 @@ class GameCallback(SubscribeCallback):
             pass  # This event happens when radio / connectivity is lost
 
         elif status.category == PNStatusCategory.PNConnectedCategory:
-            pass
+            print("Ready")
             # Connect event. You can do stuff like publish, and know you'll get it.
             # Or just use the connected event to confirm you are subscribed for
             # UI / internal notifications, etc
