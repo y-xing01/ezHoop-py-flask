@@ -34,6 +34,7 @@ count_miss = 0
 
 # Vibration Code (Done By - Terence, Clinton)
 # Motion Code (Done By - Terence, Yue Xing)
+# Implemented Vibration and Motion  (Done By - Yue Xing, Jeremy)
 
 def init():
     pubnub.add_listener(GameCallback())
