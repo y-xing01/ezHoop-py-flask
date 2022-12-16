@@ -16,6 +16,13 @@ def add_game(uid, target, score, miss):
     conn.commit()
 
 
+def get_game_by_uid(uid):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM games WHERE uid = %s", uid)
+    res = cur.fetchall()
+    return json.dumps(res, default=str)
+
+
 def add_user_details(uid, dob, firstName, lastName, gender, country):
     cur = conn.cursor()
     cur.execute("INSERT INTO userDetails (uid, dob, firstName, lastName, gender, country) VALUES (%s, %s, %s, %s, %s, %s)", (uid, dob, firstName, lastName, gender, country))

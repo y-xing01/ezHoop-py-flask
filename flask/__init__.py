@@ -28,7 +28,10 @@ def add_game():
 
 @app.route('/api/game', methods=['POST'])
 def get_game_by_uid():
-    return "WIP"
+    if request.method == 'POST':
+        uid = request.form["uid"]
+
+        return db.get_game_by_uid(uid)
 
 
 @app.route('/api/game/all', methods=['GET'])
