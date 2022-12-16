@@ -9,6 +9,7 @@ conn = pymysql.connect(
     db="ezhoop"
 )
 
+# Created and Implemented Database (Done By - Yue Xing, Jeremy)
 
 def add_game(uid, target, score, miss):
     cur = conn.cursor()
