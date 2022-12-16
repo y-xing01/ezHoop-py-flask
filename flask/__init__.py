@@ -5,6 +5,7 @@ from flask import Response, send_file
 
 app = Flask(__name__)
 
+
 @app.route('/', methods=['GET'])
 def handle_call():
     return "Hello World!"
@@ -40,6 +41,13 @@ def add_user_details():
         return {
             "status": "User details added."
         }
+
+@app.route('/api/user', methods=['POST'])
+def get_user_details():
+    if request.method == 'POST':
+        uid = request.form["uid"]
+
+        return db.get_user_details(uid)
 
 
 # @app.route('/insert', methods=['post'])

@@ -1,4 +1,5 @@
 import pymysql
+import json
 
 conn = pymysql.connect(
     host="ezhoop.ceyb9flfxbi4.us-east-1.rds.amazonaws.com",
@@ -12,6 +13,13 @@ def add_user_details(uid, dob, firstName, lastName, gender, country):
     cur = conn.cursor()
     cur.execute("INSERT INTO userDetails (uid, dob, firstName, lastName, gender, country) VALUES (%s, %s, %s, %s, %s, %s)", (uid, dob, firstName, lastName, gender, country))
     conn.commit()
+
+
+def get_user_details(uid):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM userDetails WHERE uid = %s", uid)
+    res = cur.fetchone()
+    return json.dumps(res, default=str)
 
 # def insert_details(name, email, comment, gender):
 #     cur = conn.cursor()
