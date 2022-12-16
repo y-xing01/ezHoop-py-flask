@@ -35,8 +35,8 @@ def get_game_by_uid():
 
 
 @app.route('/api/game/all', methods=['GET'])
-def get_new_games():
-    return "Hey!! I'm the fact you got!!!"
+def get_all_games():
+    return db.get_all_games()
 
 
 @app.route('/api/user/add', methods=['POST'])

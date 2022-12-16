@@ -23,6 +23,13 @@ def get_game_by_uid(uid):
     return json.dumps(res, default=str)
 
 
+def get_all_games():
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM games")
+    res = cur.fetchall()
+    return json.dumps(res, default=str)
+
+
 def add_user_details(uid, dob, firstName, lastName, gender, country):
     cur = conn.cursor()
     cur.execute("INSERT INTO userDetails (uid, dob, firstName, lastName, gender, country) VALUES (%s, %s, %s, %s, %s, %s)", (uid, dob, firstName, lastName, gender, country))
@@ -34,10 +41,3 @@ def get_user_details(uid):
     cur.execute("SELECT * FROM userDetails WHERE uid = %s", uid)
     res = cur.fetchone()
     return json.dumps(res, default=str)
-
-
-# def get_details():
-#     cur = conn.cursor()
-#     cur.execute("SELECT *  FROM Details")
-#     details = cur.fetchall()
-#     return details
