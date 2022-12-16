@@ -11,19 +11,29 @@ def handle_call():
     return "Hello World!"
 
 
-@app.route('/api/games', methods=['GET'])
-def get_games_by_uid():
-    return "Hey!! I'm the fact you got!!!"
+@app.route('/api/game/add', methods=['POST'])
+def add_game():
+    if request.method == 'POST':
+        uid = request.form["uid"]
+        target = request.form["target"]
+        score = request.form["score"]
+        miss = request.form["miss"]
+
+        db.add_game(uid, target, score, miss)
+
+        return {
+            "status": "Game added."
+        }
 
 
-@app.route('/api/games/new', methods=['GET'])
+@app.route('/api/game', methods=['POST'])
+def get_game_by_uid():
+    return "WIP"
+
+
+@app.route('/api/game/all', methods=['GET'])
 def get_new_games():
     return "Hey!! I'm the fact you got!!!"
-
-
-@app.route('/api/game/add', methods=['POST'])
-def add_game(name):
-    return "I got your name " + name
 
 
 @app.route('/api/user/add', methods=['POST'])
@@ -48,21 +58,6 @@ def get_user_details():
         uid = request.form["uid"]
 
         return db.get_user_details(uid)
-
-
-# @app.route('/insert', methods=['post'])
-# def insert():
-#     if request.method == 'POST':
-#         name = request.form['name']
-#         email = request.form['email']
-#         gender = request.form['optradio']
-#         comment = request.form['comment']
-#         db.insert_details(name, email, comment, gender)
-#         details = db.get_details()
-#         print(details)
-#         for detail in details:
-#             var = detail
-#         return render_template('index.html', var=var)
 
 
 # this commands the script to run in the given port

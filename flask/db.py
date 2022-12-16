@@ -9,6 +9,13 @@ conn = pymysql.connect(
     db="ezhoop"
 )
 
+
+def add_game(uid, target, score, miss):
+    cur = conn.cursor()
+    cur.execute("INSERT INTO games (uid, target, score, miss) VALUES (%s, %s, %s, %s)", (uid, target, score, miss))
+    conn.commit()
+
+
 def add_user_details(uid, dob, firstName, lastName, gender, country):
     cur = conn.cursor()
     cur.execute("INSERT INTO userDetails (uid, dob, firstName, lastName, gender, country) VALUES (%s, %s, %s, %s, %s, %s)", (uid, dob, firstName, lastName, gender, country))
@@ -21,12 +28,7 @@ def get_user_details(uid):
     res = cur.fetchone()
     return json.dumps(res, default=str)
 
-# def insert_details(name, email, comment, gender):
-#     cur = conn.cursor()
-#     cur.execute("INSERT INTO Details (name,email,comment,gender) VALUES (%s,%s,%s,%s)", (name, email, comment, gender))
-#     conn.commit()
-#
-#
+
 # def get_details():
 #     cur = conn.cursor()
 #     cur.execute("SELECT *  FROM Details")
