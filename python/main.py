@@ -6,6 +6,8 @@ from pubnub.enums import PNStatusCategory, PNOperationType
 import RPi.GPIO as GPIO
 import time
 
+from flask import config
+
 channel_motion = 17
 channel_vibration = 16
 
@@ -16,9 +18,11 @@ GPIO.setup(channel_vibration, GPIO.IN)
 
 pnconfig = PNConfiguration()
 
-pnconfig.subscribe_key = 'sub-c-143f84aa-6dcf-405a-8805-96edb0b9554f'
-pnconfig.publish_key = 'pub-c-c1b540b3-d0af-4fea-8316-245dc2589f12'
-pnconfig.user_id = "pi"
+pnconfig.subscribe_key = config.get("subscribe_key")
+pnconfig.publish_key = config.get("publish_key")
+pnconfig.user_id = config.get("user_id")
+pnconfig.cipher_key = config.get("cipher_key")
+pnconfig.auth_key = config.get("auth_key")
 pubnub = PubNub(pnconfig)
 
 is_game_running = False

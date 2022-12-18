@@ -1,11 +1,25 @@
 import FlaskApp.db
+from pubnub.pnconfiguration import PNConfiguration
+from pubnub.pubnub import PubNub
+from config import config
 
 from flask import Flask, render_template, request, flash, redirect, url_for, jsonify, session
 from flask import Response, send_file
 
 app = Flask(__name__)
-
 # Created and Implemented Flask Code (Done By - Yue Xing)
+
+pnconfig = PNConfiguration()
+
+pnconfig.subscribe_key = config.get("subscribe_key")
+pnconfig.publish_key = config.get("publish_key")
+pnconfig.user_id = config.get("user_id")
+pnconfig.cipher_key = config.get("cipher_key")
+pnconfig.auth_key = config.get("auth_key")
+pubnub = PubNub(pnconfig)
+
+my_channel = config.get("my_channel")
+
 @app.route('/', methods=['GET'])
 def handle_call():
     return "Hello World!"
