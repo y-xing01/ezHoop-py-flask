@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from pubnub.callbacks import SubscribeCallback
@@ -103,6 +105,19 @@ class GameCallback(SubscribeCallback):
             else:
                 end_game()
 
+    def test_no_motion(self):
+        # Set the value of the PIR pin to 0 (simulating no motion)
+        GPIO.input = MagicMock(return_value=0)
+
+        # Call the detect_motion() function
+        detect_motion()
+
+    def test_detect_motion(self):
+        # Set the value of the PIR pin to 1 (simulating motion)
+        GPIO.input = MagicMock(return_value=1)
+
+        # Call the detect_motion() function
+        detect_motion()
 
 init()
 detect_motion()
